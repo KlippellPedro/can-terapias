@@ -3,99 +3,131 @@
 import { useRef } from "react"
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion"
 
-/* ----------------------------- SVG layers ----------------------------- */
+/* ----------------------------- palette ----------------------------- */
 
-const BODY_PATH =
-  "M 82 58 Q 70 72 52 84 Q 44 92 46 108 L 50 168 Q 51 180 58 182 Q 64 182 64 170 L 70 100 Q 72 90 78 90 L 80 130 L 78 190 Q 74 215 74 240 L 70 350 Q 69 380 74 402 Q 78 408 84 402 L 90 320 Q 94 298 100 292 Q 106 298 110 320 L 116 402 Q 122 408 126 402 Q 131 380 130 350 L 126 240 Q 126 215 122 190 L 120 130 L 122 90 Q 128 90 130 100 L 136 170 Q 136 182 142 182 Q 149 180 150 168 L 154 108 Q 156 92 148 84 Q 130 72 118 58 Q 100 66 82 58 Z"
+const SAGE = "#C3CDBA" // ethereal body silhouette
+const LAVENDER = "#9B8CB9" // nerves / muscular tension (brand lilac)
+const GOLD = "#E3C18A" // energy meridians, acupoints, needle
+
+/* --------------------- continuous line-art body --------------------- */
+/* Right half only (x >= 100); mirrored around x=100 for symmetry.       */
+
+const SILHOUETTE =
+  "M100 22 C113 22 123 33 123 46 C123 57 116 63 110 65 C108 69 109 73 113 76 C126 78 137 84 144 97 C150 112 151 145 150 175 C150 198 148 212 146 223 C145 229 140 229 139 223 C137 210 136 197 133 177 C131 155 130 133 127 114 C125 133 122 152 120 168 C124 183 129 196 131 214 C131 248 127 280 124 312 C122 352 120 400 118 440 C117 448 122 452 123 455 C124 460 113 460 107 457 C104 456 101 452 100 444 C100 402 100 360 100 330"
+
+const MIRROR = "translate(200,0) scale(-1,1)"
 
 function BodyLayer() {
   return (
-    <svg viewBox="0 0 200 430" className="h-full w-auto" aria-hidden="true">
-      {/* neck */}
-      <path d="M92 58 L94 44 L106 44 L108 58 Z" fill="currentColor" opacity="0.9" />
-      {/* head */}
-      <circle cx="100" cy="30" r="20" fill="currentColor" opacity="0.9" />
-      {/* body */}
-      <path d={BODY_PATH} fill="currentColor" opacity="0.9" />
+    <svg viewBox="0 0 200 470" className="h-full w-auto" aria-hidden="true">
+      {/* soft ethereal fill */}
+      <path d={`${SILHOUETTE} Z`} fill={SAGE} fillOpacity={0.09} />
+      <path d={`${SILHOUETTE} Z`} fill={SAGE} fillOpacity={0.09} transform={MIRROR} />
+      {/* delicate thin outline */}
+      <g fill="none" stroke={SAGE} strokeWidth={0.9} strokeOpacity={0.6} strokeLinecap="round" strokeLinejoin="round">
+        <path d={SILHOUETTE} />
+        <path d={SILHOUETTE} transform={MIRROR} />
+      </g>
     </svg>
   )
 }
 
-function MuscleLayer() {
-  const stroke = "#B9A88F"
+/* --------------- muscular / nervous layer (lavender) --------------- */
+/* Fine curved threads that follow the body contour.                   */
+
+const NERVE_LINES = [
+  "M100 88 C120 92 133 101 139 120", // shoulder -> arm
+  "M100 116 C118 124 126 144 126 168", // upper ribs
+  "M100 150 C116 160 122 186 120 208", // lower ribs / oblique
+  "M100 300 C116 330 121 382 118 434", // thigh -> shin
+]
+
+function NerveLayer() {
   return (
-    <svg viewBox="0 0 200 430" className="h-full w-auto" aria-hidden="true">
-      <g fill="none" stroke={stroke} strokeWidth="1.4" strokeLinecap="round" opacity="0.85">
-        {/* spine */}
-        <path d="M100 54 L100 300" strokeWidth="2" />
-        {/* rib / muscle branches (mirrored) */}
-        <path d="M100 96 Q78 104 66 128" />
-        <path d="M100 96 Q122 104 134 128" />
-        <path d="M100 120 Q76 130 62 158" />
-        <path d="M100 120 Q124 130 138 158" />
-        <path d="M100 150 Q80 162 74 196" />
-        <path d="M100 150 Q120 162 126 196" />
-        {/* shoulders to arms */}
-        <path d="M100 84 Q70 84 52 120 L50 168" />
-        <path d="M100 84 Q130 84 148 120 L150 168" />
-        {/* legs */}
-        <path d="M100 300 Q86 320 80 400" />
-        <path d="M100 300 Q114 320 120 400" />
+    <svg
+      viewBox="0 0 200 470"
+      className="h-full w-auto"
+      aria-hidden="true"
+      style={{ filter: `drop-shadow(0 0 4px ${LAVENDER}55)` }}
+    >
+      {/* central spine */}
+      <path d="M100 58 C99 160 99 250 100 306" fill="none" stroke={LAVENDER} strokeWidth={1.4} strokeOpacity={0.9} />
+      <g fill="none" stroke={LAVENDER} strokeWidth={1} strokeOpacity={0.75} strokeLinecap="round">
+        {NERVE_LINES.map((d, i) => (
+          <path key={`r${i}`} d={d} />
+        ))}
+        {NERVE_LINES.map((d, i) => (
+          <path key={`l${i}`} d={d} transform={MIRROR} />
+        ))}
       </g>
       {/* muscle nodes */}
-      <g fill={stroke} opacity="0.9">
+      <g fill={LAVENDER} fillOpacity={0.95}>
         {[
-          [66, 128],
-          [134, 128],
-          [74, 196],
-          [126, 196],
-          [80, 400],
-          [120, 400],
-          [100, 120],
+          [139, 120],
+          [126, 168],
+          [120, 208],
+          [118, 434],
         ].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r="2.4" />
+          <g key={i}>
+            <circle cx={cx} cy={cy} r={2} />
+            <circle cx={200 - cx} cy={cy} r={2} />
+          </g>
         ))}
       </g>
     </svg>
   )
 }
 
+/* -------------------- energy meridian layer (gold) ------------------ */
+
+const MERIDIAN_LINES = [
+  "M104 80 C114 140 112 224 118 314", // torso channel
+  "M116 86 C140 102 149 142 147 198", // arm channel
+  "M118 320 C121 372 120 412 116 452", // leg channel
+]
+
 function MeridianLayer() {
-  const gold = "#E9C893"
-  const points = [
-    [100, 40],
-    [100, 96],
-    [100, 150],
-    [100, 210],
-    [82, 250],
-    [118, 250],
-    [78, 340],
-    [122, 340],
-    [76, 402],
-    [124, 402],
-    [60, 150],
-    [140, 150],
+  const acupointsRight = [
+    [147, 198],
+    [140, 120],
+    [118, 314],
+    [116, 452],
+    [112, 250],
+  ]
+  const acupointsCenter = [
+    [100, 48],
+    [100, 120],
+    [100, 186],
+    [100, 252],
+    [100, 312],
   ]
   return (
     <svg
-      viewBox="0 0 200 430"
+      viewBox="0 0 200 470"
       className="h-full w-auto"
       aria-hidden="true"
-      style={{ filter: "drop-shadow(0 0 6px rgba(233,200,147,0.55))" }}
+      style={{ filter: `drop-shadow(0 0 6px ${GOLD}66)` }}
     >
-      <g fill="none" stroke={gold} strokeWidth="1.2" strokeLinecap="round" opacity="0.9">
-        {/* central channels */}
-        <path d="M100 30 C96 120 96 220 100 300 C102 350 100 380 100 410" />
-        <path d="M92 34 C70 120 74 240 82 402" />
-        <path d="M108 34 C130 120 126 240 118 402" />
-        {/* arm channels */}
-        <path d="M96 88 C70 100 56 130 52 170" />
-        <path d="M104 88 C130 100 144 130 148 170" />
+      {/* central governing channel */}
+      <path d="M100 42 C97 150 97 250 100 322" fill="none" stroke={GOLD} strokeWidth={1.2} strokeOpacity={0.95} />
+      <g fill="none" stroke={GOLD} strokeWidth={1} strokeOpacity={0.85} strokeLinecap="round">
+        {MERIDIAN_LINES.map((d, i) => (
+          <path key={`r${i}`} d={d} />
+        ))}
+        {MERIDIAN_LINES.map((d, i) => (
+          <path key={`l${i}`} d={d} transform={MIRROR} />
+        ))}
       </g>
-      {/* acupoints */}
-      <g fill={gold}>
-        {points.map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r="2.6" />
+      {/* acupoints (Qi) */}
+      <g fill={GOLD}>
+        {acupointsCenter.map(([cx, cy], i) => (
+          <circle key={`c${i}`} cx={cx} cy={cy} r={2.4} />
+        ))}
+        {acupointsRight.map(([cx, cy], i) => (
+          <g key={`p${i}`}>
+            <circle cx={cx} cy={cy} r={2.4} />
+            <circle cx={200 - cx} cy={cy} r={2.4} />
+          </g>
         ))}
       </g>
     </svg>
@@ -121,9 +153,13 @@ function Panel({
 }) {
   return (
     <motion.div style={{ opacity, y }} className="absolute inset-0 flex flex-col justify-center">
-      <span className="font-mono text-sm tracking-[0.3em] text-[#E9C893]">{index}</span>
+      <span className="font-mono text-sm tracking-[0.3em]" style={{ color: GOLD }}>
+        {index}
+      </span>
       <h3 className="mt-3 font-serif text-3xl leading-tight text-zinc-100 sm:text-4xl text-balance">{title}</h3>
-      <p className="mt-2 text-lg font-medium text-[#B9A88F]">{subtitle}</p>
+      <p className="mt-2 text-lg font-medium" style={{ color: LAVENDER }}>
+        {subtitle}
+      </p>
       <p className="mt-4 max-w-md leading-relaxed text-zinc-400 text-pretty">{body}</p>
     </motion.div>
   )
@@ -140,10 +176,11 @@ export function ExplodedView() {
 
   // Layer separation
   const bodyY = useTransform(scrollYProgress, [0, 1], [0, -170])
-  const bodyOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [1, 0.85, 0.85, 0.7])
-  const muscleY = useTransform(scrollYProgress, [0, 1], [0, 15])
+  const bodyOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [1, 0.9, 0.9, 0.75])
+  const nerveY = useTransform(scrollYProgress, [0, 1], [0, 15])
+  const nerveOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.4, 1, 1, 0.85])
   const meridianY = useTransform(scrollYProgress, [0, 1], [0, 170])
-  const meridianOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.25, 0.7, 1])
+  const meridianOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.2, 0.7, 1])
 
   // Needle travels top -> bottom, connecting the layers
   const needleY = useTransform(scrollYProgress, [0, 1], ["-46%", "46%"])
@@ -158,17 +195,17 @@ export function ExplodedView() {
   const p3y = useTransform(scrollYProgress, [0.68, 0.76, 1], [24, 0, 0])
 
   return (
-    <section ref={ref} id="como-atua" className="relative h-[300vh] bg-zinc-950">
+    <section ref={ref} id="como-atua" className="relative h-[300vh]" style={{ backgroundColor: "#1A1816" }}>
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         {/* soft radial glow */}
         <div
           className="pointer-events-none absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(233,200,147,0.10) 0%, transparent 65%)" }}
+          style={{ background: `radial-gradient(circle, ${GOLD}18 0%, transparent 65%)` }}
         />
 
         {/* section eyebrow */}
         <div className="absolute inset-x-0 top-24 z-10 text-center">
-          <span className="font-mono text-xs uppercase tracking-[0.35em] text-[#B9A88F]">
+          <span className="font-mono text-xs uppercase tracking-[0.35em]" style={{ color: LAVENDER }}>
             Como a acupuntura atua
           </span>
           <p className="mx-auto mt-2 max-w-sm px-6 text-sm text-zinc-500">
@@ -206,14 +243,14 @@ export function ExplodedView() {
           </div>
 
           {/* Exploded stage */}
-          <div className="relative order-1 flex h-[62vh] items-center justify-center text-zinc-200 lg:order-2">
+          <div className="relative order-1 flex h-[64vh] items-center justify-center lg:order-2">
             <motion.div style={{ y: meridianY, opacity: meridianOpacity }} className="absolute h-full">
               <MeridianLayer />
             </motion.div>
-            <motion.div style={{ y: muscleY }} className="absolute h-full">
-              <MuscleLayer />
+            <motion.div style={{ y: nerveY, opacity: nerveOpacity }} className="absolute h-full">
+              <NerveLayer />
             </motion.div>
-            <motion.div style={{ y: bodyY, opacity: bodyOpacity }} className="absolute h-full text-[#3F4A3A]">
+            <motion.div style={{ y: bodyY, opacity: bodyOpacity }} className="absolute h-full">
               <BodyLayer />
             </motion.div>
 
@@ -223,10 +260,17 @@ export function ExplodedView() {
               className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             >
               <div className="flex flex-col items-center">
-                <div className="h-3 w-3 rounded-full bg-[#E9C893] shadow-[0_0_14px_4px_rgba(233,200,147,0.7)]" />
                 <div
-                  className="w-px bg-gradient-to-b from-[#E9C893] to-[#E9C893]/40"
-                  style={{ height: "56vh", boxShadow: "0 0 8px 1px rgba(233,200,147,0.6)" }}
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: GOLD, boxShadow: `0 0 14px 4px ${GOLD}b3` }}
+                />
+                <div
+                  className="w-px"
+                  style={{
+                    height: "56vh",
+                    background: `linear-gradient(to bottom, ${GOLD}, ${GOLD}66)`,
+                    boxShadow: `0 0 8px 1px ${GOLD}99`,
+                  }}
                 />
               </div>
             </motion.div>
