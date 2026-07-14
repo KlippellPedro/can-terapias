@@ -6,25 +6,52 @@ import { motion, useScroll, useTransform, type MotionValue } from "framer-motion
 /* ----------------------------- palette ----------------------------- */
 
 const SAGE = "#C3CDBA" // ethereal body silhouette
-const LAVENDER = "#9B8CB9" // nerves / muscular tension (brand lilac)
-const GOLD = "#E3C18A" // energy meridians, acupoints, needle
+const LAVENDER = "#B49FD8" // nerves / muscular tension (soft neon lilac)
+const GOLD = "#E6C591" // energy meridians, acupoints, needle
 
-/* --------------------- continuous line-art body --------------------- */
-/* Right half only (x >= 100); mirrored around x=100 for symmetry.       */
+/* --------------- high-fidelity full-body silhouette ---------------- */
+/* Right half only; mirrored around x=100 for perfect symmetry.        */
 
 const SILHOUETTE =
-  "M100 22 C113 22 123 33 123 46 C123 57 116 63 110 65 C108 69 109 73 113 76 C126 78 137 84 144 97 C150 112 151 145 150 175 C150 198 148 212 146 223 C145 229 140 229 139 223 C137 210 136 197 133 177 C131 155 130 133 127 114 C125 133 122 152 120 168 C124 183 129 196 131 214 C131 248 127 280 124 312 C122 352 120 400 118 440 C117 448 122 452 123 455 C124 460 113 460 107 457 C104 456 101 452 100 444 C100 402 100 360 100 330"
+  "M100 16 C118 16 131 29 131 47 C131 61 123 69 115 73 L113 82 C131 84 146 88 153 99 C160 124 161 158 158 189 C157 205 155 216 151 218 C148 219 146 215 145 207 C144 182 140 145 133 120 C131 138 128 154 126 170 C127 188 132 202 138 217 C143 262 141 342 133 402 C132 431 131 448 128 455 C127 460 119 460 115 457 C112 452 114 402 112 362 C110 322 107 307 100 303"
 
 const MIRROR = "translate(200,0) scale(-1,1)"
+
+/* Frosted-glass wrapper that makes each layer read as a floating panel */
+function GlassPanel({
+  children,
+  tint,
+}: {
+  children: React.ReactNode
+  tint: string
+}) {
+  return (
+    <div className="relative flex h-full items-center justify-center px-8 py-6">
+      <div
+        className="absolute inset-0 rounded-[2.5rem] border backdrop-blur-md"
+        style={{
+          borderColor: `${tint}22`,
+          background: `linear-gradient(150deg, ${tint}14 0%, ${tint}06 45%, transparent 100%)`,
+          boxShadow: `inset 0 1px 0 ${tint}22, 0 24px 60px -30px ${tint}55`,
+        }}
+      />
+      <div className="relative h-full">{children}</div>
+    </div>
+  )
+}
 
 function BodyLayer() {
   return (
     <svg viewBox="0 0 200 470" className="h-full w-auto" aria-hidden="true">
-      {/* soft ethereal fill */}
-      <path d={`${SILHOUETTE} Z`} fill={SAGE} fillOpacity={0.09} />
-      <path d={`${SILHOUETTE} Z`} fill={SAGE} fillOpacity={0.09} transform={MIRROR} />
-      {/* delicate thin outline */}
-      <g fill="none" stroke={SAGE} strokeWidth={0.9} strokeOpacity={0.6} strokeLinecap="round" strokeLinejoin="round">
+      <defs>
+        <linearGradient id="bodyFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={SAGE} stopOpacity={0.22} />
+          <stop offset="100%" stopColor={SAGE} stopOpacity={0.06} />
+        </linearGradient>
+      </defs>
+      <path d={`${SILHOUETTE} Z`} fill="url(#bodyFill)" />
+      <path d={`${SILHOUETTE} Z`} fill="url(#bodyFill)" transform={MIRROR} />
+      <g fill="none" stroke={SAGE} strokeWidth={0.9} strokeOpacity={0.7} strokeLinecap="round" strokeLinejoin="round">
         <path d={SILHOUETTE} />
         <path d={SILHOUETTE} transform={MIRROR} />
       </g>
@@ -32,14 +59,13 @@ function BodyLayer() {
   )
 }
 
-/* --------------- muscular / nervous layer (lavender) --------------- */
-/* Fine curved threads that follow the body contour.                   */
+/* --------------- nervous / muscular layer (lavender) --------------- */
 
 const NERVE_LINES = [
-  "M100 88 C120 92 133 101 139 120", // shoulder -> arm
-  "M100 116 C118 124 126 144 126 168", // upper ribs
-  "M100 150 C116 160 122 186 120 208", // lower ribs / oblique
-  "M100 300 C116 330 121 382 118 434", // thigh -> shin
+  "M100 90 C122 94 138 104 150 122",
+  "M100 118 C120 128 129 148 131 172",
+  "M100 156 C118 168 124 190 122 214",
+  "M100 300 C118 332 124 384 120 440",
 ]
 
 function NerveLayer() {
@@ -48,11 +74,10 @@ function NerveLayer() {
       viewBox="0 0 200 470"
       className="h-full w-auto"
       aria-hidden="true"
-      style={{ filter: `drop-shadow(0 0 4px ${LAVENDER}55)` }}
+      style={{ filter: `drop-shadow(0 0 6px ${LAVENDER}66)` }}
     >
-      {/* central spine */}
-      <path d="M100 58 C99 160 99 250 100 306" fill="none" stroke={LAVENDER} strokeWidth={1.4} strokeOpacity={0.9} />
-      <g fill="none" stroke={LAVENDER} strokeWidth={1} strokeOpacity={0.75} strokeLinecap="round">
+      <path d="M100 58 C99 160 99 250 100 306" fill="none" stroke={LAVENDER} strokeWidth={1.5} strokeOpacity={0.95} />
+      <g fill="none" stroke={LAVENDER} strokeWidth={1} strokeOpacity={0.8} strokeLinecap="round">
         {NERVE_LINES.map((d, i) => (
           <path key={`r${i}`} d={d} />
         ))}
@@ -60,17 +85,16 @@ function NerveLayer() {
           <path key={`l${i}`} d={d} transform={MIRROR} />
         ))}
       </g>
-      {/* muscle nodes */}
-      <g fill={LAVENDER} fillOpacity={0.95}>
+      <g fill={LAVENDER}>
         {[
-          [139, 120],
-          [126, 168],
-          [120, 208],
-          [118, 434],
+          [150, 122],
+          [131, 172],
+          [122, 214],
+          [120, 440],
         ].map(([cx, cy], i) => (
           <g key={i}>
-            <circle cx={cx} cy={cy} r={2} />
-            <circle cx={200 - cx} cy={cy} r={2} />
+            <circle cx={cx} cy={cy} r={2.1} />
+            <circle cx={200 - cx} cy={cy} r={2.1} />
           </g>
         ))}
       </g>
@@ -81,36 +105,35 @@ function NerveLayer() {
 /* -------------------- energy meridian layer (gold) ------------------ */
 
 const MERIDIAN_LINES = [
-  "M104 80 C114 140 112 224 118 314", // torso channel
-  "M116 86 C140 102 149 142 147 198", // arm channel
-  "M118 320 C121 372 120 412 116 452", // leg channel
+  "M104 80 C114 140 112 224 118 314",
+  "M116 86 C142 104 152 146 149 202",
+  "M118 320 C121 374 120 414 117 452",
 ]
 
 function MeridianLayer() {
-  const acupointsRight = [
-    [147, 198],
-    [140, 120],
-    [118, 314],
-    [116, 452],
-    [112, 250],
-  ]
   const acupointsCenter = [
-    [100, 48],
+    [100, 46],
     [100, 120],
     [100, 186],
     [100, 252],
     [100, 312],
+  ]
+  const acupointsRight = [
+    [149, 202],
+    [142, 122],
+    [118, 314],
+    [117, 452],
+    [112, 250],
   ]
   return (
     <svg
       viewBox="0 0 200 470"
       className="h-full w-auto"
       aria-hidden="true"
-      style={{ filter: `drop-shadow(0 0 6px ${GOLD}66)` }}
+      style={{ filter: `drop-shadow(0 0 8px ${GOLD}80)` }}
     >
-      {/* central governing channel */}
-      <path d="M100 42 C97 150 97 250 100 322" fill="none" stroke={GOLD} strokeWidth={1.2} strokeOpacity={0.95} />
-      <g fill="none" stroke={GOLD} strokeWidth={1} strokeOpacity={0.85} strokeLinecap="round">
+      <path d="M100 42 C97 150 97 250 100 322" fill="none" stroke={GOLD} strokeWidth={1.3} strokeOpacity={0.98} />
+      <g fill="none" stroke={GOLD} strokeWidth={1} strokeOpacity={0.9} strokeLinecap="round">
         {MERIDIAN_LINES.map((d, i) => (
           <path key={`r${i}`} d={d} />
         ))}
@@ -118,15 +141,14 @@ function MeridianLayer() {
           <path key={`l${i}`} d={d} transform={MIRROR} />
         ))}
       </g>
-      {/* acupoints (Qi) */}
       <g fill={GOLD}>
         {acupointsCenter.map(([cx, cy], i) => (
-          <circle key={`c${i}`} cx={cx} cy={cy} r={2.4} />
+          <circle key={`c${i}`} cx={cx} cy={cy} r={2.6} />
         ))}
         {acupointsRight.map(([cx, cy], i) => (
           <g key={`p${i}`}>
-            <circle cx={cx} cy={cy} r={2.4} />
-            <circle cx={200 - cx} cy={cy} r={2.4} />
+            <circle cx={cx} cy={cy} r={2.6} />
+            <circle cx={200 - cx} cy={cy} r={2.6} />
           </g>
         ))}
       </g>
@@ -175,12 +197,12 @@ export function ExplodedView() {
   })
 
   // Layer separation
-  const bodyY = useTransform(scrollYProgress, [0, 1], [0, -170])
-  const bodyOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [1, 0.9, 0.9, 0.75])
-  const nerveY = useTransform(scrollYProgress, [0, 1], [0, 15])
-  const nerveOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.4, 1, 1, 0.85])
-  const meridianY = useTransform(scrollYProgress, [0, 1], [0, 170])
-  const meridianOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.2, 0.7, 1])
+  const bodyY = useTransform(scrollYProgress, [0, 1], [0, -175])
+  const bodyOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [1, 0.95, 0.95, 0.85])
+  const nerveY = useTransform(scrollYProgress, [0, 1], [0, 12])
+  const nerveOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.35, 1, 1, 0.9])
+  const meridianY = useTransform(scrollYProgress, [0, 1], [0, 175])
+  const meridianOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.2, 0.75, 1])
 
   // Needle travels top -> bottom, connecting the layers
   const needleY = useTransform(scrollYProgress, [0, 1], ["-46%", "46%"])
@@ -195,12 +217,16 @@ export function ExplodedView() {
   const p3y = useTransform(scrollYProgress, [0.68, 0.76, 1], [24, 0, 0])
 
   return (
-    <section ref={ref} id="como-atua" className="relative h-[300vh]" style={{ backgroundColor: "#1A1816" }}>
+    <section ref={ref} id="como-atua" className="relative h-[300vh]" style={{ backgroundColor: "#141210" }}>
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        {/* soft radial glow */}
+        {/* ambient glows */}
         <div
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: `radial-gradient(circle, ${GOLD}18 0%, transparent 65%)` }}
+          className="pointer-events-none absolute left-[62%] top-1/2 h-[75vh] w-[75vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: `radial-gradient(circle, ${GOLD}1f 0%, transparent 62%)` }}
+        />
+        <div
+          className="pointer-events-none absolute left-[62%] top-[38%] h-[45vh] w-[45vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: `radial-gradient(circle, ${LAVENDER}1a 0%, transparent 65%)` }}
         />
 
         {/* section eyebrow */}
@@ -242,34 +268,40 @@ export function ExplodedView() {
             />
           </div>
 
-          {/* Exploded stage */}
-          <div className="relative order-1 flex h-[64vh] items-center justify-center lg:order-2">
+          {/* Exploded glass stage */}
+          <div className="relative order-1 flex h-[66vh] items-center justify-center lg:order-2">
             <motion.div style={{ y: meridianY, opacity: meridianOpacity }} className="absolute h-full">
-              <MeridianLayer />
+              <GlassPanel tint={GOLD}>
+                <MeridianLayer />
+              </GlassPanel>
             </motion.div>
             <motion.div style={{ y: nerveY, opacity: nerveOpacity }} className="absolute h-full">
-              <NerveLayer />
+              <GlassPanel tint={LAVENDER}>
+                <NerveLayer />
+              </GlassPanel>
             </motion.div>
             <motion.div style={{ y: bodyY, opacity: bodyOpacity }} className="absolute h-full">
-              <BodyLayer />
+              <GlassPanel tint={SAGE}>
+                <BodyLayer />
+              </GlassPanel>
             </motion.div>
 
             {/* Golden needle */}
             <motion.div
               style={{ y: needleY, opacity: needleOpacity }}
-              className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
             >
               <div className="flex flex-col items-center">
                 <div
                   className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: GOLD, boxShadow: `0 0 14px 4px ${GOLD}b3` }}
+                  style={{ backgroundColor: GOLD, boxShadow: `0 0 16px 5px ${GOLD}cc` }}
                 />
                 <div
                   className="w-px"
                   style={{
-                    height: "56vh",
-                    background: `linear-gradient(to bottom, ${GOLD}, ${GOLD}66)`,
-                    boxShadow: `0 0 8px 1px ${GOLD}99`,
+                    height: "58vh",
+                    background: `linear-gradient(to bottom, ${GOLD}, ${GOLD}55)`,
+                    boxShadow: `0 0 10px 1px ${GOLD}aa`,
                   }}
                 />
               </div>
