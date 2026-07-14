@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Backgrounds & surfaces */
+  --color-background: #fbf4f1;
+  --color-bg-alt: #f3e7e2;
+  --color-surface: #ffffff;
+
+  /* Brand — extracted from logo assets */
+  --color-roxo: #ab96c1;
+  --color-roxo-dark: #8e76a8;
+  --color-verde: #86a49b;
+  --color-verde-dark: #6c8a81;
+
+  /* Service accents */
+  --color-rosa-accent: #c98f86;
+  --color-rosa-accent-dark: #b07369;
+  --color-dourado: #c6a05f;
+  --color-dourado-dark: #a9853f;
+  --color-azul: #92a9bc;
+  --color-azul-dark: #74899e;
+  --color-terracota: #a9795f;
+  --color-terracota-dark: #8c6249;
+
+  /* Text */
+  --color-ink: #443a36;
+  --color-ink-soft: #6f5b58;
+  --color-marrom: #63524d;
+  --color-foreground: #443a36;
+
+  /* WhatsApp */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #1da851;
+
+  /* Fonts */
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-jost), "Segoe UI", sans-serif;
+
+  /* Radii */
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-background);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-background);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  color: var(--color-marrom);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Scroll snap cue animation */
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}

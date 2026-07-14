@@ -5,3 +5,10 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Node / Next.js
+node_modules/
+.next/
+next-env.d.ts
+.vercel
+*.tsbuildinfo
