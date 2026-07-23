@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartão de Visitas - Cibele Nadalon</title>
+    <!-- Tailwind CSS (via CDN para facilitar a impressão única) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#74A8A4',
+                        accent: '#7F6DA5',
+                        base: '#EDDFDD',
+                        ink: '#544A49',
+                        inksoft: '#726564'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS focado 100% para impressão gráfica profissional */
+        @page {
+            /* Padrão brasileiro: 90x50mm. Adicionando sangria de 2mm (94x54mm) se a gráfica pedir, 
+               mas usaremos 90x50mm para preview exato. */
+            size: 90mm 50mm;
+            margin: 0;
+        }
+
+        body {
+            background-color: #d1d5db; /* Fundo cinza para preview na tela */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .cartao-face {
+            width: 90mm;
+            height: 50mm;
+            background-color: #EDDFDD; /* A cor base deles */
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            page-break-after: always; /* Cada face em uma página do PDF */
+            print-color-adjust: exact !important;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        @media print {
+            body {
+                background-color: transparent;
+                padding: 0;
+                gap: 0;
+                display: block;
+            }
+            .cartao-face {
+                box-shadow: none;
+                /* margens zeradas garantidas */
+                margin: 0;
+            }
+        }
+
+        /* SVG Logos */
+        .logo-placeholder {
+            font-family: 'Playfair Display', serif;
+            font-size: 20pt;
+            color: #74A8A4;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-ink">
+
+    <!-- FRENTE DO CARTÃO -->
+    <div class="cartao-face flex flex-col items-center justify-center relative">
+        <!-- Detalhe minimalista de design -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent"></div>
+        <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-white opacity-20"></div>
+        <div class="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-primary opacity-5"></div>
+        
+        <div class="z-10 text-center flex flex-col items-center">
+            <!-- Ícone da Lótus Recortado -->
+            <div class="relative w-16 h-16 overflow-hidden rounded-full flex items-center justify-center mb-3">
+                <img 
+                  src="./img/fotos/logo-transparente.png" 
+                  alt="Flor de Lótus" 
+                  class="absolute w-full h-full object-cover object-center scale-[2.8] brightness-[0.4] contrast-[1.5] mix-blend-multiply opacity-90"
+                />
+            </div>
+            <!-- Tipografia Clássica -->
+            <h1 class="font-serif text-[16pt] text-ink leading-none tracking-wide">Cibele A. Nadalon</h1>
+            <p class="text-[5.5pt] text-primary tracking-[0.25em] uppercase mt-2 font-medium">Acupuntura & Terapias Integrativas</p>
+        </div>
+    </div>
+
+    <!-- VERSO DO CARTÃO -->
+    <div class="cartao-face flex relative bg-white">
+        <!-- Linha lateral fina -->
+        <div class="absolute top-0 left-0 w-1 h-full bg-accent"></div>
+        
+        <div class="flex w-full h-full p-6 pl-8">
+            <!-- Info (Esquerda) -->
+            <div class="flex-1 flex flex-col justify-center">
+                <div class="text-[6pt] text-inksoft leading-[1.4]">
+                    <ul class="list-none space-y-[3px]">
+                        <li>• Alinhamento Energético e Radiestesia</li>
+                        <li>• Quick Massage & Ginástica Laboral</li>
+                        <li>• Reiki & Mandalas Cristalinas</li>
+                        <li>• Constelação Familiar</li>
+                        <li>• Acupuntura & Shiatsu</li>
+                    </ul>
+                </div>
+                
+                <div class="flex gap-4 mt-3">
+                    <!-- WhatsApp -->
+                    <div class="flex items-center gap-1.5">
+                        <svg class="w-3 h-3 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <span class="text-[6pt] font-medium text-inksoft">(51) 99561-2876</span>
+                    </div>
+                    <!-- Instagram -->
+                    <div class="flex items-center gap-1.5">
+                        <svg class="w-3 h-3 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                        <span class="text-[6pt] font-medium text-inksoft">@canterapias</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code (Direita) -->
+            <div class="flex flex-col items-center justify-center pl-4 border-l border-base/30">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://canterapias.com.br" alt="QR Code Site" class="w-14 h-14 mix-blend-multiply opacity-90">
+                <span class="text-[4.5pt] uppercase tracking-widest text-primary mt-1 font-semibold">Acesse o Site</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

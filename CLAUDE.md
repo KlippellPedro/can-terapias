@@ -23,7 +23,9 @@ Seções da página única:
 **Sem formulário de contato** — decisão já tomada, CTA único é WhatsApp, para não depender de serviço de terceiro em site estático.
 
 ## Stack técnico
-HTML/CSS/JS estático puro. Sem backend, sem banco de dados (diferente de outros projetos do Pedro que usam Flask — aqui não se justifica, é site institucional sem dado dinâmico). Responsivo mobile obrigatório.
+**Pivô em 14/07/2026**: migrado de HTML/CSS/JS estático puro para **Vite + React 19 + TypeScript + Tailwind CSS v4 + Framer Motion**. Ainda sem backend, sem banco de dados, sem servidor — build estático (SPA de página única), hospedagem continua sendo qualquer host de arquivos estáticos (Netlify/Vercel/GitHub Pages/Cloudflare Pages, ver seção Hospedagem). O motivo do pivô foi a seção "Como a acupuntura atua" (`ExplodedView`, ver `src/components/exploded-view.tsx`): uma cena scroll-driven com três camadas SVG (corpo, nervos, meridianos) que se separam em glassmorphism conforme o scroll, usando `useScroll`/`useTransform` do Framer Motion — viável em JS vanilla, mas o React + Framer Motion tornou a implementação e a manutenção bem mais diretas. Pedro trouxe um projeto já gerado em Next.js (via outra ferramenta de IA) com todas as seções reescritas nesse novo stack; migrei Next→Vite (SPA sem roteamento server-side, já que o site é uma página única) e portei aqui.
+
+Responsivo mobile obrigatório (mantido do escopo original).
 
 ## Design
 - **Manter logo e paleta de cor atuais**: rosa empoeirado (fundo), cinza, roxo, verde-água (blocos de serviço).
@@ -58,7 +60,7 @@ HTML/CSS/JS estático puro. Sem backend, sem banco de dados (diferente de outros
 - Descrição **mais aprofundada** de cada serviço, se quisermos ir além da frase curta/expandida já usada no card (ver `pesquisa-terapias.md` para o conteúdo educativo completo com fontes, inclusive notas sobre quais práticas têm ou não respaldo científico — não necessariamente para publicar como está, é contexto para as decisões de copywriting da Cibele).
 - Confirmar o sentido exato de "#maepancreas" (ver nota atualizada acima — é hashtag intencional dela no Instagram, não erro de digitação).
 - Confirmar a palavra "biza" no depoimento da Danielle (frase omitida do site por ora, ver nota no `index.html`).
-- **RESOLVIDO (04/07/2026) — ilustrações de serviço**: `img/servicos/` existe e tem os 6 SVGs (ver `pesquisa-terapias.md`, seção "Imagens criadas"). A nota antiga dizendo que essa pasta não existia estava desatualizada.
+- **CORRIGIDO (14/07/2026) — ilustrações de serviço**: a nota anterior dizia que `img/servicos/` existia com 6 SVGs — checagem direta em 14/07/2026 mostrou que essa pasta nunca existiu no projeto (só `img/fotos/` e `img/icons/`). Ponto discutível, mas não bloqueia nada: os 6 ícones de serviço agora são SVG inline por componente (`ServicoIcon` em `src/components/icons.tsx`), não dependem de arquivo de imagem.
 - **Fotos reais dela/do espaço — parcialmente resolvido via Instagram @canterapias (04/07/2026)**: perfil é público, sem necessidade de login pra ver a grade de posts. Melhores achados pra reaproveitar no site (ver post completo antes de decidir, alguns são carrossel):
   - `instagram.com/p/DJReg-rSOXM/` — carrossel "Quem sou eu?", primeiro slide é peça gráfica de marca (roxo, tipografia CAN) e o segundo slide é um retrato real dela ao ar livre, boa qualidade — candidato forte pra Hero ou Sobre (hoje só há 1 foto no projeto).
   - `instagram.com/p/DP3w3hbjGok/` — foto real dela aplicando quick massage num piloto da Stuttgart Porsche (evento "3 dias de atendimento exclusivo"), prova social forte pra Shiatsu e Quickmassage.
@@ -92,9 +94,21 @@ Sugestões de nome (a decidir):
 Ainda não escolhida. Opções comuns para site estático com domínio próprio: Netlify, Vercel, GitHub Pages, Cloudflare Pages. Não há confirmação de qual é a melhor opção atual para este caso específico — verificar direto na documentação de cada uma antes de decidir.
 
 ## Status
-**Protótipo iniciado em 04/07/2026**: `index.html`, `css/style.css` e `js/script.js` já existem na raiz do projeto, com as 5 seções da página única. Servidor local de teste configurado em `.claude/launch.json` (Python `http.server`).
+**Protótipo iniciado em 04/07/2026**: versão estática (`index.html`, `css/style.css`, `js/script.js`) com as 5 seções da página única.
 
-**Atualização no mesmo dia**: Pedro trouxe prints de 3 avaliações reais do Google (resolvendo o depoimento pendente) e um arquivo `pesquisa-terapias.md` (pesquisa com fontes sobre cada modalidade terapêutica, incluindo notas de status científico). Com isso: os 3 depoimentos deixaram de ser placeholder, as descrições dos serviços foram expandidas com conteúdo real da pesquisa, Reiki ganhou descrição própria, e um 6º serviço (Shiatsu e Quickmassage) foi adicionado. Pendências novas: nome público do Reiki ("e Magia Divina"?) e confirmação do Shiatsu/Quickmassage como card oficial — ver Conteúdo pendente.
+**Atualização em 04/07/2026**: Pedro trouxe prints de 3 avaliações reais do Google (resolvendo o depoimento pendente) e um arquivo `pesquisa-terapias.md` (pesquisa com fontes sobre cada modalidade terapêutica, incluindo notas de status científico). Com isso: os 3 depoimentos deixaram de ser placeholder, as descrições dos serviços foram expandidas com conteúdo real da pesquisa, Reiki ganhou descrição própria, e um 6º serviço (Shiatsu e Quickmassage) foi adicionado.
+
+**Pivô em 14/07/2026 — migração para Vite + React + TypeScript**: a versão estática foi substituída pela stack descrita em "Stack técnico" acima. Estrutura atual:
+- `index.html` — entry point Vite (metadata SEO, JSON-LD, favicon, `<div id="root">`).
+- `src/main.tsx` — bootstrap do React, importa fontes (`@fontsource/playfair-display`, `@fontsource/jost`, self-hospedadas — sem chamada externa ao Google Fonts) e `index.css`.
+- `src/App.tsx` — monta as seções na ordem (Header, Hero, Sobre, ExplodedView, Serviços, Depoimentos, Contato, Footer, botão flutuante de WhatsApp).
+- `src/components/*.tsx` — um componente por seção/elemento; `exploded-view.tsx` é a peça nova (cena scroll-driven, ver Stack técnico).
+- `src/lib/data.ts` — dados de serviços, depoimentos e links (WhatsApp, nav) centralizados.
+- `src/index.css` — tokens de design Tailwind v4 (`@theme inline`), mesma paleta de cores já documentada em Design.
+- `public/img/` — mesmos assets de imagem que já existiam em `img/` (movidos, não duplicados).
+- `.claude/launch.json` atualizado para rodar `npm run dev` (Vite, porta 5500) em vez do `python -m http.server` antigo — **rodar `npm install` antes do primeiro `npm run dev`**.
+
+Pendências de conteúdo inalteradas pelo pivô de stack: nome público do Reiki ("e Magia Divina"?) e confirmação do Shiatsu/Quickmassage como card oficial — ver Conteúdo pendente.
 
 ## Pendências que bloqueiam início do código
 1. Nome de domínio final.

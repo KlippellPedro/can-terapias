@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@import "@fontsource/playfair-display/500.css";
+@import "@fontsource/playfair-display/600.css";
+@import "@fontsource/playfair-display/700.css";
+@import "@fontsource/playfair-display/500-italic.css";
+@import "@fontsource/playfair-display/600-italic.css";
+@import "@fontsource/jost/300.css";
+@import "@fontsource/jost/400.css";
+@import "@fontsource/jost/500.css";
+@import "@fontsource/jost/600.css";
+@import "@fontsource/jost/700.css";
+
+@theme inline {
+  /* Backgrounds & surfaces */
+  --color-background: #EDDFDD; /* Fundo principal */
+  --color-bg-alt: #DFCECC; /* Fundo secundário suave */
+  --color-surface: #ffffff;
+
+  /* Brand - Cores originais do CAN Terapias */
+  --color-primary: #74A8A4; /* Verde Água */
+  --color-primary-dark: #5B8683;
+  --color-accent: #7F6DA5; /* Lilás */
+  --color-accent-dark: #665587;
+  
+  /* Text */
+  --color-ink: #544A49; /* Marrom Escuro / Tinta */
+  --color-ink-soft: #726564;
+  --color-marrom: #665B5A;
+  --color-foreground: #544A49;
+
+  /* WhatsApp */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #1da851;
+
+  /* Fonts */
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Jost", "Segoe UI", sans-serif;
+
+  /* Radii */
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Offset anchored sections so they land below the fixed 72px header. */
+  scroll-padding-top: 5rem;
+  background-color: var(--color-background);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-background);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  color: var(--color-marrom);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Since we double the array, we translate by -50% of the flex container width */
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}

@@ -1,6 +1,11 @@
 # Claude Code local settings (machine-specific permissions, not shared)
 .claude/settings.local.json
 
+# Node / Vite
+node_modules/
+dist/
+*.local
+
 # OS cruft
 .DS_Store
 Thumbs.db
