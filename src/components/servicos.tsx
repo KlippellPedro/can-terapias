@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { TiltCard } from "./tilt-card";
 import { cn } from "@/lib/utils";
 import { Sparkles, Flower2, HeartPulse, Brain, Sun, Activity } from "lucide-react";
 
@@ -88,26 +89,27 @@ export function Servicos() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -5, scale: 1.01 }}
-              className={cn(
-                "group relative p-8 md:p-10 rounded-[32px] bg-[#EDDFDD] border border-[#7F6DA5]/30 overflow-hidden flex flex-col justify-between transition-all duration-500",
-                "hover:shadow-2xl hover:shadow-[#74A8A4]/10",
-                service.colSpan
-              )}
+              className={service.colSpan}
             >
-              {/* Background Glow on Hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#74A8A4]/0 to-[#74A8A4]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative z-20">
-                <div className="w-14 h-14 rounded-2xl bg-[#DFCECC] text-[#74A8A4] flex items-center justify-center mb-8 border border-[#7F6DA5]/20 group-hover:scale-110 transition-transform duration-500">
-                  {service.icon}
+              <TiltCard className={cn(
+                "group relative p-8 md:p-10 rounded-[32px] bg-[#EDDFDD] border border-[#7F6DA5]/30 flex flex-col justify-between transition-all duration-500 h-full",
+                "hover:shadow-2xl hover:shadow-[#74A8A4]/20"
+              )}>
+                {/* Background Glow on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#74A8A4]/0 to-[#74A8A4]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[32px] pointer-events-none" />
+                
+                <div className="relative z-20">
+                  <div className="w-14 h-14 rounded-2xl bg-[#DFCECC] text-[#74A8A4] flex items-center justify-center mb-8 border border-[#7F6DA5]/20 group-hover:scale-110 transition-transform duration-500">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-2xl font-serif text-[#544A49] mb-4 group-hover:text-[#74A8A4] transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-[#726564] leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-serif text-[#544A49] mb-4 group-hover:text-[#74A8A4] transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-[#726564] leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>

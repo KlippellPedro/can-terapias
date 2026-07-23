@@ -89,7 +89,7 @@ export function ExplodedView() {
         <div className="flex flex-col lg:flex-row gap-12 relative items-start">
           
           {/* Sticky Visual / Silhouette (Left Side on Desktop) */}
-          <div className="lg:w-1/2 w-full lg:sticky lg:top-32 h-[500px] flex items-center justify-center bg-[#DFCECC]/50 rounded-[40px] border border-[#7F6DA5]/30 overflow-hidden relative">
+          <div className="hidden lg:flex lg:w-1/2 lg:sticky lg:top-32 h-[500px] items-center justify-center bg-[#DFCECC]/50 rounded-[40px] border border-[#7F6DA5]/30 overflow-hidden relative">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#EDDFDD]/50 pointer-events-none" />
             
             {/* Elegant SVG Silhouette - Continuous Line */}

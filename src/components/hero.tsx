@@ -18,13 +18,10 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#EDDFDD] pt-20">
-      {/* Organic Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -right-[5%] w-[500px] h-[500px] rounded-full bg-[#7F6DA5]/20 blur-[100px] mix-blend-multiply" />
-        <div className="absolute top-[20%] -left-[10%] w-[600px] h-[600px] rounded-full bg-[#74A8A4]/10 blur-[120px] mix-blend-multiply" />
-        <div className="absolute -bottom-[10%] left-[20%] w-[400px] h-[400px] rounded-full bg-[#DFCECC] blur-[80px]" />
-      </div>
+    <section id="inicio" className="relative min-h-screen pt-32 pb-20 flex items-center overflow-hidden bg-gradient-to-b from-[#FFFFFF] to-[#F5F2F2]">
+      {/* Background Elements */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#7F6DA5]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#74A8A4]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
         {/* Text Content */}
@@ -92,6 +89,7 @@ export function Hero() {
             <img 
               src="/img/fotos/principal.avif" 
               alt="Cibele Nadalon" 
+              fetchPriority="high"
               className="w-full h-full object-cover object-center saturate-[1.15] contrast-[1.1] brightness-[1.05]"
             />
           </div>

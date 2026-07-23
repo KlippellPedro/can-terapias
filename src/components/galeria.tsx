@@ -39,6 +39,7 @@ export function Galeria() {
               <img 
                 src={img.src} 
                 alt={img.title}
+                loading="lazy"
                 className="w-full h-auto object-cover saturate-[1.2] contrast-[1.15] brightness-[1.1] transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#544A49]/80 via-[#544A49]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">

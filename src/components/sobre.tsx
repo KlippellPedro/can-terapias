@@ -21,6 +21,7 @@ export function Sobre() {
               <img 
                 src="/img/fotos/shiatsu.png" 
                 alt="Sessão de Shiatsu" 
+                loading="lazy"
                 className="w-full h-full object-cover saturate-[1.15] contrast-[1.1]"
               />
             </motion.div>
@@ -36,6 +37,7 @@ export function Sobre() {
               <img 
                 src="/img/fotos/massagem_1.jpg" 
                 alt="Consultório acolhedor" 
+                loading="lazy"
                 className="w-full h-full object-cover saturate-[1.15] contrast-[1.1]"
               />
             </motion.div>
