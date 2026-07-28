@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "build:local": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
   },
   "dependencies": {
     "@fontsource/jost": "^5.1.0",
